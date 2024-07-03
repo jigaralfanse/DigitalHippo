@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
 import Provider from "@/components/provider";
 import { Toaster } from "sonner";
+import Footer from "@/components/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -24,6 +25,7 @@ export default function RootLayout({
           <Provider>
         <Navbar />
           <div className='flex-grow flex-1'>{children}</div>
+          <Footer />
           </Provider>
         </main>
         <Toaster position="top-center" richColors/>
