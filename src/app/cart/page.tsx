@@ -16,13 +16,15 @@ const Page = () => {
 
   const router = useRouter()
 
-//   const { mutate: createCheckoutSession, isLoading } =
-//     trpc.payment.createSession.useMutation({
-//       onSuccess: ({ url }) => {
-//         if (url) router.push(url)
-//       },
-//     })
-
+  const { mutate: createCheckoutSession, isLoading } = trpc.payment.createSession.useMutation({
+    onSuccess: ({ url }) => {
+      console.log('Checkout session URL:', url);
+      if (url) router.push(url);
+    },
+    onError: (error) => {
+      console.error('Error creating checkout session:', error);
+    },
+  });
   const productIds = items.map(({ product }) => product.id)
 
   const [isMounted, setIsMounted] = useState<boolean>(false)
@@ -42,6 +44,7 @@ const Page = () => {
       <div className='mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8'>
         <h1 className='text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>
           Shopping Cart
+
         </h1>
 
         <div className='mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16'>
@@ -60,7 +63,7 @@ const Page = () => {
                   aria-hidden='true'
                   className='relative mb-4 h-40 w-40 text-muted-foreground'>
                   <Image
-                    src='/hippo-empty-cart.png'
+                    src='/nav/hippo-empty-cart.png'
                     fill
                     loading='eager'
                     alt='empty shopping cart hippo'
@@ -95,7 +98,7 @@ const Page = () => {
                       <div className='flex-shrink-0'>
                         <div className='relative h-24 w-24'>
                           {typeof image !== 'string' &&
-                          image.url ? (
+                            image.url ? (
                             <Image
                               fill
                               src={image.url}
@@ -209,18 +212,20 @@ const Page = () => {
 
             <div className='mt-6'>
               <Button
-                // disabled={items.length === 0 || isLoading}
-                // onClick={() =>
-                //   createCheckoutSession({ productIds })
-                // }
-                // className='w-full'
-                 size='lg'
-                // {isLoading ? (
-                //   <Loader2 className='w-4 h-4 animate-spin mr-1.5' />
-                // ) : null}
-            >
-                CheckOut
+                disabled={items.length === 0 || isLoading}
+                onClick={() => {
+                  console.log('Creating checkout session...');
+                  createCheckoutSession({ productIds });
+                }}
+                className='w-full'
+                size='lg'>
+                {isLoading ? (
+                  <Loader2 className='w-4 h-4 animate-spin mr-1.5' />
+                ) : (
+                  'Checkout'
+                )}
               </Button>
+
             </div>
           </section>
         </div>
